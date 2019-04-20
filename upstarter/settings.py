@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #Own apps
+    'upstarter',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -99,6 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Authentication model
+AUTH_USER_MODEL = 'upstarter.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
