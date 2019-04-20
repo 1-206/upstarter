@@ -10,16 +10,16 @@ class Tag(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    tags = models.ManyToManyField(Tag, related_name='projects')
+    tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     founder = models.ForeignKey(User, related_name='founded_projects', on_delete=models.CASCADE)
-    cofounders = models.ManyToManyField(User, related_name='cofounded_projects')
-    performers = models.ManyToManyField(User, related_name='performed_projects')
+    cofounders = models.ManyToManyField(User, related_name='cofounded_projects', blank=True)
+    performers = models.ManyToManyField(User, related_name='performed_projects', blank=True)
     required_investments = models.FloatField()
 
 
 class Investment(models.Model):
-    investor = models.ForeignKey(User, related_name='investments')
-    project = models.ForeignKey(Project, related_name='investments')
+    investor = models.ForeignKey(User, related_name='investments', on_delete=models.DO_NOTHING)
+    project = models.ForeignKey(Project, related_name='investments', on_delete=models.DO_NOTHING)
     amount = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
