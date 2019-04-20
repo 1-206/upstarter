@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.urls import reverse
 from django.http import (
     HttpResponseRedirect,
@@ -9,7 +9,8 @@ from django.contrib.auth import (
     logout as django_logout,
     get_user_model,
 )
-
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.template import RequestContext
 
 from .forms import (
     AuthorizationForm,
@@ -55,6 +56,7 @@ def logout(request):
 
 
 @redirect_if_authorized
+@ensure_csrf_cookie
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
