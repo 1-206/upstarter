@@ -11,12 +11,6 @@ class AuthorizationForm(forms.Form):
 
 class RegistrationForm(forms.Form):
 
-    USER_TYPES = (
-        ('Student', 'Student'),
-        ('Instructor', 'Instructor'),
-        ('Admin', 'Admin'),
-    )
-
     name = forms.CharField(
             label="Name",
             required=True
