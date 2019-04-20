@@ -19,7 +19,7 @@ class Project(models.Model):
 
 
 class Investment(models.Model):
-    investor = models.ForeignKey(User, related_name='investments')
-    project = models.ForeignKey(Project, related_name='investments')
+    investor = models.ForeignKey(User, related_name='investments', on_delete='DO_NOTHING')
+    project = models.ForeignKey(Project, related_name='investments', on_delete='DO_NOTHING')
     amount = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
