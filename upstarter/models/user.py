@@ -25,6 +25,10 @@ class UserManager(BaseUserManager):
         return user
 
 
+class Skill(models.Model):
+    name = models.CharField(max_length=128)
+
+
 class User(AbstractBaseUser):
 
     name = models.CharField(max_length=30)
@@ -34,9 +38,7 @@ class User(AbstractBaseUser):
     birthday = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=256, blank=True, null=True)
-    #TODO
-    #skills
-
+    skills = models.ManyToManyField(Skill, related_name='users')
 
     # Methods and fields for enabling authentication on this model
     objects = UserManager()
