@@ -31,9 +31,9 @@ class User(AbstractBaseUser):
     surname = models.CharField(max_length=30)
     email = models.EmailField(unique=True, max_length=256)
     password = models.CharField(max_length=128)
-    birthday = models.DateField()
-    bio = models.TextField()
-    location = models.CharField(max_length=256)
+    birthday = models.DateField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    location = models.CharField(max_length=256, blank=True, null=True)
     #TODO
     #skills
 
