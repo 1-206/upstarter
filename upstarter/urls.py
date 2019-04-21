@@ -11,6 +11,6 @@ urlpatterns = [
     path('projects/create/', views.create_project, name='create_project'),
     path('personal/', views.list_personal_projects, name='personal_project'),
 
-    path('authentiation/', include('authentication.urls')),
+    path('authentication/', include('authentication.urls')),
     path('admin/', admin.site.urls, name='admin'),
 ]
