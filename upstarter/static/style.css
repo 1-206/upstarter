@@ -1,14 +1,10 @@
-/* Bootstrap adjustments */
-
+/* Main */
 .container--main {
   min-height: calc(100vh - 56px);
 }
 
 
-/* UpStarter styles */
-
 /* User */
-
 .user__img {
   border-radius: 50%;
 }
@@ -28,4 +24,12 @@
 }
 
 .user__bio {
+}
+
+
+/* Project */
+.project__participant {
+}
+a.project__participant {
+  text-decoration: none;
 }
