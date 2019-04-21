@@ -1,5 +1,5 @@
 from django.db.models import Q
-from .models import Project
+from upstarter.models import Project, Investment
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import (
@@ -24,7 +24,7 @@ def list_all_projects(request):
     user = User.objects.get(pk=request.user.id)
     projects = Project.objects.all()
     data = {'user': user, 'projects': projects}
-    return render(request, 'upstarter/search.html', data)
+    return render(request, 'upstarter/main.html', data)
 
 
 @require_authorized
@@ -69,3 +69,33 @@ def create_project(request):
 
     data = {'user': user, 'form': form}
     return render(request, 'upstarter/project_creation.html', data)
+
+
+@require_authorized
+def personal(request):
+    user = User.objects.get(pk=request.user.id)
+    return render(request, 'upstarter/user.html', {'user': user})
+
+
+@require_authorized
+def invest_in_project(request, id):
+    user = User.objects.get(pk=request.user.id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+        return HttpResponse('No such project')
+    if request.method == 'POST':
+        form = ProjectInvestmentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            Investment.objects.create(
+                    investor=user,
+                    project=project,
+                    amount=amount
+                    )
+            return HttpResponseRedirect(reverse('project', kwargs={'id': id}))
+    else:
+        form = ProjectCreationForm()
+
+    data = {'user': user, 'form': form}
+    return render(request, 'upstarter/investment.html', data)

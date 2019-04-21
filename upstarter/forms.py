@@ -29,3 +29,23 @@ class ProjectCreationForm(forms.Form):
 
         return cleaned_data
 
+
+class ProjectInvestmentForm(forms.Form):
+
+    amount = forms.FloatField(
+            label="Required investments",
+            required=True,
+            )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        amount = cleaned_data.get('amount')
+
+        if amount <= 0:
+            self.add_error(
+                'amount',
+                "Must be positive"
+            )
+
+        return cleaned_data
+
