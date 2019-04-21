@@ -3,6 +3,11 @@
   min-height: calc(100vh - 56px);
 }
 
+a.link {
+  color: inherit;
+  text-decoration: none;
+}
+
 
 /* User */
 .user__img {
@@ -32,4 +37,7 @@
 }
 a.project__participant {
   text-decoration: none;
+}
+
+.project__link {
 }
