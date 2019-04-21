@@ -6,9 +6,10 @@ class ProjectCreationForm(forms.Form):
 
     name = forms.CharField(
             label="Name",
-            required=True
+            required=True,
+
             )
-    description = forms.TextField(
+    description = forms.CharField(
             label="Description",
             required=True
             )
