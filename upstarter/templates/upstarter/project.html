@@ -1,154 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'upstarter/main.html' %}
+{% block title %}
+    <title>{{ data.project.name }}</title>
+{% endblock %}
+{% block content %}
+    <!-- PROJECT -->
+    <div class="container container--main bg-white">
+        <div class="py-5 px-0 px-sm-5">
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <div class="row">
+                <div class="col-12 col-md-3 order-md-1">
+                    <span class="text-muted h6 float-right">Started {{ data.project.creation_date }}</span>
+                </div>
 
-  <title>Bhaumik Patel</title>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
-  <link rel="stylesheet" href="../../static/style.css">
-
-</head>
-
-<body class="bg-light">
-
-  <!-- HEADER -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-
-      <a class="navbar-brand" href="#">Upstarter</a>
-
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Startups</a>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
-              My Account
-            </a>
-
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Profile</a>
-              <a class="dropdown-item" href="#">Startups</a>
+                <div class="col-12 col-md-9">
+                    <h1 class="display-4">{{ data.project.name }}</h1>
+                </div>
             </div>
-          </li>
-        </ul>
 
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search...">
-          <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Find Startup</button>
-        </form>
-      </div>
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <span class="text-muted">tags:</span>
+                    {% for tag in data.project.tags %}
+                        <span class="badge badge-pill badge-primary">{{ tag }}</span>
+                    {% endfor %}
+                </div>
 
+                <div class="col-12 mb-5">
+                    <h2>Idea</h2>
+                    <p>
+                        {{ data.project.description }}
+                    </p>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h2>Funding</h2>
+
+                    <h6>Required: <i class="font-weight-normal">{{ data.project.required_investments }}</i></h6>
+                    <h6>Raised: <i class="font-weight-normal">{{ data.project.raised }}</i></h6>
+
+
+                    <div class="pt-4">
+                        <div class="progress shadow" style="height: 36px">
+                            <div class="progress-bar bg-dark"
+                                 style="width:{{ data.project.required_investments }}/{{ data.project.required_investments }}*{{ 100 }}%"></div>
+                        </div>
+{#                        <h6 class="display-3 text-center mt-4"><span#}
+{#                                class="display-4">{{ data.project.raised }}</span>#}
+{#                            / {{ data.project.required_investments }}</h6>#}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-around mb-4">
+                <div class="col-12">
+                    <h2>Team</h2>
+                </div>
+
+                <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
+                    <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+                         class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
+                    <h3 class="font-weight-light text-center">{{ data.project.founder.name }}{{ data.project.founder.surname }}</h3>
+                    <h4 class="font-weight-light text-center mx-auto"><i>Founder</i></h4>
+                </a>
+                {% for member in data.project.cofounders %}
+                    <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
+                        <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+                             class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
+                        <h3 class="font-weight-light text-center">{{ member.name }}{{ member.surname }}</h3>
+                        <h4 class="font-weight-light text-center mx-auto"><i>Co-founder</i></h4>
+                    </a>
+                {% endfor %}
+                {% for member in data.project.performers %}
+                    <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
+                        <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+                             class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
+                        <h3 class="font-weight-light text-center">{{ member.name }}{{ member.surname }}</h3>
+                        <h4 class="font-weight-light text-center mx-auto"><i>Performer</i></h4>
+                    </a>
+                {% endfor %}
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="text-center mb-4">Join Us</h2>
+                </div>
+
+                <div class="col-12">
+                    <form class="form-inline flex-nowrap justify-content-around" action="post">
+                        <button type="submit" class="btn btn-light">
+                            Join as a Co-Founder
+                        </button>
+
+                        <button type="submit" class="btn btn-dark">
+                            Join as an Investor
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </div>
-  </nav>
-  <!-- HEADER END -->
+    <!-- PROJECT END -->
+{% endblock %}
 
-  <!-- PROJECT -->
-  <div class="container container--main bg-white">
-   <div class="py-5 px-0 px-sm-5">
-
-     <div class="row">
-       <div class="col-12 col-md-3 order-md-1">
-         <span class="text-muted h6 float-right">started 12.03.19</span>
-       </div>
-
-       <div class="col-12 col-md-9">
-         <h1 class="display-4">Amazon Go as a service</h1>
-       </div>
-     </div>
-
-     <div class="row">
-       <div class="col-12 mb-5">
-         <span class="text-muted">tags:</span>
-         <span class="badge badge-pill badge-primary">retail</span>
-         <span class="badge badge-pill badge-primary">machine learning</span>
-         <span class="badge badge-pill badge-primary">saas</span>
-       </div>
-
-       <div class="col-12 mb-5">
-         <h2>Idea</h2>
-         <p>
-           "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-         </p>
-       </div>
-
-       <div class="col-12 mb-5">
-         <h2>Funding</h2>
-
-         <h6>Required: <i class="font-weight-normal">1000$</i></h6>
-         <h6>Funded: <i class="font-weight-normal">100$</i></h6>
-
-
-         <div class="pt-4">
-           <div class="progress shadow" style="height: 36px">
-             <div class="progress-bar bg-dark" style="width: 10%"></div>
-           </div>
-           <h6 class="display-3 text-center mt-4"><span class="display-4">100$</span> / 1000$</h6>
-         </div>
-       </div>
-     </div>
-
-     <div class="row justify-content-around mb-4">
-       <div class="col-12">
-         <h2>Team</h2>
-       </div>
-
-       <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
-         <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
-              class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
-         <h3 class="font-weight-light text-center">Ivan Komarov</h3>
-         <h4 class="font-weight-light text-center mx-auto"><i>Founder</i></h4>
-       </a>
-       <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
-         <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
-              class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
-         <h3 class="font-weight-light text-center">Danil Kalinin</h3>
-         <h4 class="font-weight-light text-center mx-auto"><i>Investor</i></h4>
-       </a>
-       <a href="#" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
-         <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
-              class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
-         <h3 class="font-weight-light text-center">Andrey Volkov</h3>
-         <h4 class="font-weight-light text-center mx-auto"><i>Founder</i></h4>
-       </a>
-     </div>
-
-     <div class="row justify-content-center">
-       <div class="col-12">
-         <h2 class="text-center mb-4">Join Us</h2>
-       </div>
-
-       <div class="col-12">
-         <form class="form-inline flex-nowrap justify-content-around" action="post">
-           <button type="submit" class="btn btn-light">
-             Join as Co-Founder
-           </button>
-
-           <button type="submit" class="btn btn-dark">
-             Join as Investor
-           </button>
-         </form>
-       </div>
-     </div>
-
-   </div>
-  </div>
-  <!-- PROJECT END -->
-
-</body>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</html>
