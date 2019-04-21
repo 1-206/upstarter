@@ -1,0 +1,68 @@
+version: "2.4"
+
+services:
+  nginx:
+    build:
+      context: "."
+      dockerfile: "docker/Dockerfile.nginx"
+    user: "$DOCKER_USER"
+    ports:
+      - "127.0.0.1:80:8080"
+    volumes:
+      - "sockets:/tmp/sockets"
+      - "django-static:/var/www/static:ro"
+      - "django-media:/var/www/media:ro"
+    depends_on:
+      - django
+    restart: "on-failure"
+
+  django:
+    build:
+      context: "."
+      dockerfile: "docker/Dockerfile.django"
+    command: "uwsgi"
+    user: "$DOCKER_USER"
+    environment:
+      UWSGI_PROCESSES: 1
+      UWSGI_THREADS: 4
+      UWSGI_HARAKIRI: 60
+      UWSGI_MAX_REQUESTS: 100
+      DJANGO_APP_NAME: "upstarter"
+      DJANGO_SECRET_KEY: "2u!bb6b8falux_^^qdl8*@d%z0f6z_65=&fs0gs_s_zu7ok@%9"
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: "localhost"
+      DJANGO_LOGGING_LEVEL: "DEBUG"
+      DJANGO_DATABASE_NAME: "pgdb"
+      DJANGO_DATABASE_USER: "pguser"
+      DJANGO_DATABASE_PASSWORD: "pgpassword"
+      DJANGO_DATABASE_HOST: "postgres"
+      DJANGO_DATABASE_PORT: "5432"
+    volumes:
+      - "./django:/app"
+      - "django-static:/app/static"
+      - "django-media:/app/media"
+      - "sockets:/tmp/sockets"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "on-failure"
+
+  postgres:
+    image: "postgres:10.4"
+    user: "$DOCKER_USER"
+    volumes:
+      - "postgres-data:/var/lib/postgresql/data"
+    environment:
+      - "PGDATA=/var/lib/postgresql/data/pgdata"
+      - "POSTGRES_DB=pgdb"
+      - "POSTGRES_USER=pguser"
+      - "POSTGRES_PASSWORD=pgpassword"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postrgres"]
+    restart: "on-failure"
+
+volumes:
+  postgres-data:
+  django-static:
+  django-media:
+  sockets:

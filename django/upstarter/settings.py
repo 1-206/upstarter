@@ -15,17 +15,14 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%(mvw&pf=hjo#^xp-=l6djv^&rxu0zf!l2d^5iv=zdm5rm5bss'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ['DJANGO_DEBUG'] == 'True')
 
-ALLOWED_HOSTS = []
+# Allowed hosts
+ALLOWED_HOSTS = [x.strip() for x in os.environ['DJANGO_ALLOWED_HOSTS'].split(',')]
 
 
 # Application definition
@@ -38,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Own apps
+    # Own apps
     'upstarter',
     'authentication',
 ]
@@ -79,8 +76,12 @@ WSGI_APPLICATION = 'upstarter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DJANGO_DATABASE_NAME'],
+        'USER': os.environ['DJANGO_DATABASE_USER'],
+        'PASSWORD': os.environ['DJANGO_DATABASE_PASSWORD'],
+        'HOST': os.environ['DJANGO_DATABASE_HOST'],
+        'PORT': os.environ['DJANGO_DATABASE_PORT'],
     }
 }
 
@@ -103,8 +104,43 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#Authentication model
+# Authentication model
+
 AUTH_USER_MODEL = 'upstarter.User'
+
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': ('%(asctime)s'
+                       ' | %(levelname)-8s'
+                       ' | %(name)s'
+                       ' | %(message)s'),
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'upstarter': {
+            'level': os.environ['DJANGO_LOGGING_LEVEL'],
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -124,5 +160,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-AUTH_USER_MODEL = 'upstarter.User'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

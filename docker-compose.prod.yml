@@ -1,0 +1,68 @@
+version: "2.4"
+
+services:
+  nginx:
+    build:
+      context: "."
+      dockerfile: "docker/Dockerfile.nginx"
+    user: "$DOCKER_USER"
+    environment:
+      VIRTUAL_HOST: "$VIRTUAL_HOST"
+      VIRTUAL_PORT: "8080"
+    volumes:
+      - "sockets:/tmp/sockets"
+      - "django-static:/var/www/static:ro"
+      - "django-media:/var/www/media:ro"
+    depends_on:
+      - "django"
+    restart: "always"
+
+  django:
+    build:
+      context: "."
+      dockerfile: "docker/Dockerfile.django"
+    command: "uwsgi"
+    user: "$DOCKER_USER"
+    environment:
+      UWSGI_PROCESSES: "$DJANGO_UWSGI_PROCESSES"
+      UWSGI_THREADS: "$DJANGO_UWSGI_THREADS"
+      UWSGI_HARAKIRI: "$DJANGO_UWSGI_HARAKIRI"
+      UWSGI_MAX_REQUESTS: "$DJANGO_UWSGI_MAX_REQUESTS"
+      DJANGO_APP_NAME: "hela"
+      DJANGO_SECRET_KEY: "$DJANGO_SECRET_KEY"
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: "$DJANGO_ALLOWED_HOSTS"
+      DJANGO_LOGGING_LEVEL: "INFO"
+      DJANGO_DATABASE_NAME: "pgdb"
+      DJANGO_DATABASE_USER: "pguser"
+      DJANGO_DATABASE_PASSWORD: "pgpassword"
+      DJANGO_DATABASE_HOST: "postgres"
+      DJANGO_DATABASE_PORT: "5432"
+    volumes:
+      - "sockets:/tmp/sockets"
+      - "django-static:/app/static"
+      - "django-media:/app/media"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "always"
+
+  postgres:
+    image: "postgres:10.4"
+    user: "$DOCKER_USER"
+    volumes:
+      - "postgres-data:/var/lib/postgresql/data"
+    environment:
+      - "PGDATA=/var/lib/postgresql/data/pgdata"
+      - "POSTGRES_DB=pgdb"
+      - "POSTGRES_USER=pguser"
+      - "POSTGRES_PASSWORD=pgpassword"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postrgres"]
+    restart: "always"
+
+volumes:
+  postgres-data:
+  django-static:
+  django-media:
+  sockets:

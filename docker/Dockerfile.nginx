@@ -1,0 +1,17 @@
+FROM nginx:1.15.0
+
+ARG CONTEXT=nginx
+
+RUN mkdir -p -m 777 /tmp/sockets/ /var/www/static/ /var/www/media/; \
+    chmod 777 /var/cache/nginx/;
+
+VOLUME ["/tmp/sockets/", "/var/www/static/", "/var/www/media/"]
+
+EXPOSE "8080"
+
+COPY $CONTEXT/config /etc/nginx
+COPY ./docker/nginx-entrypoint.sh ./docker-entrypoint.sh
+
+ENTRYPOINT ["bash", "docker-entrypoint.sh"]
+
+CMD ["nginx"]
