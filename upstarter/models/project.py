@@ -17,6 +17,11 @@ class Project(models.Model):
     performers = models.ManyToManyField(User, related_name='performed_projects', blank=True)
     required_investments = models.FloatField()
 
+    @property
+    def raised(self):
+        total = sum([i.amount for i in self.investments])
+        return total
+
 
 class Investment(models.Model):
     investor = models.ForeignKey(User, related_name='investments', on_delete=models.DO_NOTHING)
