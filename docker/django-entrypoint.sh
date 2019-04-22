@@ -12,6 +12,11 @@ echo "Applying database migrations..."
 echo "done"
 echo
 
+echo "Rebuilding elasticsearch indices..."
+./manage.py search_index --rebuild -f
+echo "done"
+echo
+
 echo "Collecting static files..."
 ./manage.py collectstatic --noinput
 echo "done"

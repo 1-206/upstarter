@@ -1,5 +1,4 @@
 from django.db.models import Q
-from upstarter.models import Project, Investment
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import (
@@ -8,6 +7,10 @@ from django.http import (
 )
 
 from django.contrib.auth import get_user_model
+
+from upstarter.models import Project, Investment
+from upstarter.documents import ProjectDocument
+
 User = get_user_model()
 
 
@@ -46,7 +49,19 @@ def project(request, id):
         project = Project.objects.get(pk=id)
     except Project.DoesNotExist:
         return HttpResponse('No such project')
-    data = {'user': user, 'project': project}
+    # Use elasticsearch for relevant documents searching
+    search = ProjectDocument.search()
+    query = search.query(
+        'more_like_this', fields=['name', 'description', 'investment'],
+        like={'_id': project.id}, min_term_freq=1, min_doc_freq=1,
+    )
+    relevant_projects = query.to_queryset()[:3]
+    # Context initialization
+    data = {
+        'user': user,
+        'project': project,
+        'relevant_projects': relevant_projects,
+    }
     return render(request, 'upstarter/project.html', data)
 
 

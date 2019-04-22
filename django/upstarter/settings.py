@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Third-party apps
+    'django_elasticsearch_dsl',
+
     # Own apps
     'upstarter',
     'authentication',
@@ -82,6 +85,19 @@ DATABASES = {
         'PASSWORD': os.environ['DJANGO_DATABASE_PASSWORD'],
         'HOST': os.environ['DJANGO_DATABASE_HOST'],
         'PORT': os.environ['DJANGO_DATABASE_PORT'],
+    }
+}
+
+
+# Elasticsearch dsl configuration
+# https://github.com/sabricot/django-elasticsearch-dsl
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': '{0}:{1}'.format(
+            os.environ['DJANGO_ELASTICSEARCH_HOST'],
+            os.environ['DJANGO_ELASTICSEARCH_PORT'],
+        )
     }
 }
 

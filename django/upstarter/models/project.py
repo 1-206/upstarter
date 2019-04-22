@@ -2,7 +2,6 @@ from django.db import models
 from .user import User
 
 
-
 class Tag(models.Model):
     name = models.CharField(max_length=128)
 
