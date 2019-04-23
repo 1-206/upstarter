@@ -58,6 +58,9 @@
 <!-- HEADER END -->
 
 {% block content %}
+  {% for project in projects.all %}
+        {% include 'upstarter/personal_project_item.html' %}
+    {% endfor %}
 {% endblock %}
 
 </body>

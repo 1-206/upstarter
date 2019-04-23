@@ -32,7 +32,7 @@ class Project(models.Model):
 
     @property
     def raised(self):
-        total = sum([i.amount for i in self.investments])
+        total = sum([i.amount for i in self.investments.all()])
         return total
 
 

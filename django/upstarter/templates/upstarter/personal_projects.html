@@ -5,21 +5,15 @@
 {% block content %}
 
     {% for project in founded.all %}
-        {% if project.founder == user %}
         {% include 'upstarter/personal_project_item.html' %}
-        {% endif %}
     {% endfor %}
 
     {% for project in cofounded.all %}
-        {% if user in project.cofounders %}
         {% include 'upstarter/personal_project_item.html' %}
-        {% endif %}
     {% endfor %}
 
     {% for project in performed.all %}
-        {% if user in project.performers %}
         {% include 'upstarter/personal_project_item.html' %}
-        {% endif %}
     {% endfor %}
 
 {% endblock %}
