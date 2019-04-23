@@ -1,20 +1,13 @@
-from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import (
-    HttpResponseRedirect,
-    HttpResponse,
-)
+from django.http import HttpResponse, HttpResponseRedirect
 
-from django.contrib.auth import get_user_model
-
-from upstarter.models import Project, Investment
+from upstarter.forms import ProjectCreationForm, ProjectInvestmentForm
+from upstarter.models import Project, Investment, User
 from upstarter.documents import ProjectDocument
 
-User = get_user_model()
 
-
-def require_authorized(function):
+def require_authentication(function):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
@@ -22,7 +15,7 @@ def require_authorized(function):
     return wrapper
 
 
-@require_authorized
+@require_authentication
 def list_all_projects(request):
     user = User.objects.get(pk=request.user.id)
     projects = Project.objects.all()
@@ -30,19 +23,19 @@ def list_all_projects(request):
     return render(request, 'upstarter/main.html', data)
 
 
-@require_authorized
+@require_authentication
 def list_personal_projects(request):
     user = User.objects.get(pk=request.user.id)
     data = {
-            'user': user,
-            'founded': user.founded_projects,
-            'cofounded': user.cofounded_projects,
-            'performed': user.performed_projects,
-            }
+        'user': user,
+        'founded': user.founded_projects,
+        'cofounded': user.cofounded_projects,
+        'performed': user.performed_projects,
+    }
     return render(request, 'upstarter/personal_projects.html', data)
 
 
-@require_authorized
+@require_authentication
 def project(request, id):
     user = User.objects.get(pk=request.user.id)
     try:
@@ -65,20 +58,22 @@ def project(request, id):
     return render(request, 'upstarter/project.html', data)
 
 
-@require_authorized
+@require_authentication
 def create_project(request):
     user = User.objects.get(pk=request.user.id)
     if request.method == 'POST':
         form = ProjectCreationForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            id = Project.objects.create(
-                    name=data['name'],
-                    description=data['description'],
-                    founder=user,
-                    required_investments=data['required_investments']
-                    )
-            return HttpResponseRedirect(reverse('project', kwargs={'id': id}))
+            project = Project.objects.create(
+                name=data['name'],
+                description=data['description'],
+                founder=user,
+                required_investments=data['required_investments']
+            )
+            return HttpResponseRedirect(
+                reverse('project-detail', kwargs={'id': project.id})
+            )
     else:
         form = ProjectCreationForm()
 
@@ -86,13 +81,13 @@ def create_project(request):
     return render(request, 'upstarter/project_creation.html', data)
 
 
-@require_authorized
+@require_authentication
 def personal(request):
     user = User.objects.get(pk=request.user.id)
     return render(request, 'upstarter/user.html', {'user': user})
 
 
-@require_authorized
+@require_authentication
 def invest_in_project(request, id):
     user = User.objects.get(pk=request.user.id)
     try:
@@ -104,11 +99,13 @@ def invest_in_project(request, id):
         if form.is_valid():
             amount = form.cleaned_data['amount']
             Investment.objects.create(
-                    investor=user,
-                    project=project,
-                    amount=amount
-                    )
-            return HttpResponseRedirect(reverse('project', kwargs={'id': id}))
+                investor=user,
+                project=project,
+                amount=amount
+            )
+            return HttpResponseRedirect(
+                reverse('project-detail', kwargs={'id': id})
+            )
     else:
         form = ProjectCreationForm()
 

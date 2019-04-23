@@ -1,14 +1,15 @@
-/* Bootstrap adjustments */
-
+/* Main */
 .container--main {
   min-height: calc(100vh - 56px);
 }
 
+a.link {
+  color: inherit;
+  text-decoration: none;
+}
 
-/* UpStarter styles */
 
 /* User */
-
 .user__img {
   border-radius: 50%;
 }
@@ -28,4 +29,15 @@
 }
 
 .user__bio {
+}
+
+
+/* Project */
+.project__participant {
+}
+a.project__participant {
+  text-decoration: none;
+}
+
+.project__link {
 }

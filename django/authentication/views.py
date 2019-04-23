@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.urls import reverse
 from django.http import (
     HttpResponseRedirect,
@@ -10,7 +10,6 @@ from django.contrib.auth import (
     get_user_model,
 )
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.template import RequestContext
 
 from .forms import (
     AuthorizationForm,
@@ -18,7 +17,6 @@ from .forms import (
 )
 
 User = get_user_model()
-
 
 
 def redirect_if_authorized(function):
@@ -69,14 +67,12 @@ def register(request):
             if User.objects.filter(email=email).exists():
                 form.add_error('email', "Email already in use")
             else:
-                is_superuser = False
-                is_staff = False
-                user = User.objects.create_user(email=email,
-                                                password=password,
-                                                name=name,
-                                                surname=surname,
-                                                is_staff=is_staff,
-                                                is_superuser=is_superuser)
+                user = User.objects.create_user(
+                    email=email,
+                    password=password,
+                    name=name,
+                    surname=surname,
+                )
                 user.save()
                 return HttpResponseRedirect(reverse('login'))
     else:
