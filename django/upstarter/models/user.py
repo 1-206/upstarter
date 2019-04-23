@@ -6,6 +6,9 @@ from authentication.models import BaseUser
 class Skill(models.Model):
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class User(BaseUser):
     birthday = models.DateField(blank=True, null=True)

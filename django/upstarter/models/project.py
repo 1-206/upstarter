@@ -35,6 +35,9 @@ class Project(models.Model):
         total = sum([i.amount for i in self.investments.all()])
         return total
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Investment(models.Model):
     amount = models.FloatField()
@@ -51,3 +54,6 @@ class Investment(models.Model):
         related_name='investments',
         on_delete=models.DO_NOTHING,
     )
+
+    def __str__(self):
+        return f'Project({self.project})'
