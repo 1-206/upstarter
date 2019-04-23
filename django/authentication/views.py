@@ -1,15 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import (
-    HttpResponseRedirect,
-)
+from django.http import HttpResponseRedirect
 from django.contrib.auth import (
     authenticate as django_authenticate,
     login as django_login,
     logout as django_logout,
     get_user_model,
 )
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import (
     AuthorizationForm,
@@ -19,7 +16,7 @@ from .forms import (
 User = get_user_model()
 
 
-def redirect_if_authorized(function):
+def redirect_if_authenticated(function):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('index'))
@@ -27,7 +24,7 @@ def redirect_if_authorized(function):
     return wrapper
 
 
-@redirect_if_authorized
+@redirect_if_authenticated
 def login(request):
     if request.method == 'POST':
         form = AuthorizationForm(request.POST)
@@ -41,7 +38,9 @@ def login(request):
                 django_login(request, user)
                 return HttpResponseRedirect(reverse('index'))
             else:
-                form.add_error(None, "No such user")
+                form.add_error(
+                    None, "User with given credentials doesn't exist"
+                )
     else:
         form = AuthorizationForm()
 
@@ -53,8 +52,7 @@ def logout(request):
     return HttpResponseRedirect(reverse('login'))
 
 
-@redirect_if_authorized
-@ensure_csrf_cookie
+@redirect_if_authenticated
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)

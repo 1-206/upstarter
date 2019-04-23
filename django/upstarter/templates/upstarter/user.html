@@ -1,72 +1,55 @@
-{% extends 'upstarter/main.html' %}
+{% extends 'upstarter/base.html' %}
+
 {% block title %}
-    <title>{{ user.name }} {{ user.surname }}</title>
+  <title>{{user.name}} {{user.surname}}</title>
 {% endblock %}
+
 {% block content %}
-    <div class="container container--main bg-white">
+  <div class="container container--main bg-white">
 
-        <div class="row pb-4 pt-3">
-            <div class="col-12 col-md-4 col-lg-3">
-                <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
-                     class="img img-rounded img-fluid user__img"/>
-            </div>
+    <div class="row pb-4 pt-3">
+      <div class="col-12 col-md-4 col-lg-3">
+        <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+            class="img img-rounded img-fluid user__img"/>
+      </div>
 
-            <div class="col-12 col-md-8 col-lg-9">
-                <div class="user__headline d-flex align-items-center justify-content-between">
-                    <h1>{{ user.name }} {{ user.surname }}</h1>
-                    <button class="btn text-secondary" type="submit" title="Edit">
-                        <i class="fas fa-user-edit h2 m-0"></i>
-                    </button>
-                </div>
-
-                <small class="user__info user__address">
-                    <cite title="San Francisco, USA">
-                        {{ user.location }}
-                        <i class="fas fa-map-marker-alt"></i>
-                    </cite>
-                </small>
-
-                <div class="user__info">
-                    <i class="fas fa-envelope"></i>
-                    {{ user.email }}
-                </div>
-
-                <div class="user__info">
-                    <i class="fas fa-globe"></i>
-                    <a href="http://www.jquery2dotnet.com">www.jquery2dotnet.com</a>
-                </div>
-
-                <div class="user__info">
-                    <i class="fas fa-birthday-cake"></i>
-                    {{ user.birthday }}
-                </div>
-            </div>
+      <div class="col-12 col-md-8 col-lg-9">
+        <div class="user__headline d-flex align-items-center justify-content-between">
+          <h1>{{user.name}} {{user.surname}}</h1>
+          <button class="btn text-secondary" type="submit" title="Edit">
+            <i class="fas fa-user-edit h2 m-0"></i>
+          </button>
         </div>
 
-        <div class="row">
-            <div class="col-12 col-lg-6">
-                <h2>SKILLS</h2>
-                <p>
-                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
-                    classical
-                    Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
-                    Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from
-                    a
-                    Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the
-                    undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
-                    Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the
-                    theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum
-                    dolor
-                    sit amet..", comes from a line in section 1.10.32.
-                </p>
-            </div>
-            <div class="col-12 col-lg-6">
-                <h2>BIO</h2>
-                <p>
-                    {{ user.bio }}
-                </p>
-            </div>
+        <small class="user__info user__address">
+          <cite title="San Francisco, USA">
+            {{user.location}}
+            <i class="fas fa-map-marker-alt"></i>
+          </cite>
+        </small>
+
+        <div class="user__info">
+          <i class="fas fa-envelope"></i>
+          {{user.email}}
         </div>
 
+        <div class="user__info">
+          <i class="fas fa-birthday-cake"></i>
+          {{user.birthday}}
+        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <h2>SKILLS</h2>
+        <p>{{user.skills}}</p>
+      </div>
+      <div class="col-12 col-lg-6">
+        <h2>BIOGRAPHY</h2>
+        <p>{{user.biography}}</p>
+      </div>
+    </div>
+
+  </div>
 {% endblock %}

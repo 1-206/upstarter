@@ -1,16 +1,12 @@
 from django.db import models
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=128)
-
-
 class Project(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    tags = models.CharField(max_length=1024, blank=True)
     required_investments = models.FloatField()
+    creation_date = models.DateTimeField(auto_now_add=True)
 
     founder = models.ForeignKey(
         'User',
@@ -19,20 +15,12 @@ class Project(models.Model):
     )
 
     cofounders = models.ManyToManyField(
-        'User',
-        related_name='cofounded_projects',
-        blank=True,
-    )
-
-    performers = models.ManyToManyField(
-        'User',
-        related_name='performed_projects',
-        blank=True,
+        'User', related_name='cofounded_projects',
     )
 
     @property
     def raised(self):
-        total = sum([i.amount for i in self.investments.all()])
+        total = sum(i.amount for i in self.investments.all())
         return total
 
     def __str__(self):
@@ -56,4 +44,4 @@ class Investment(models.Model):
     )
 
     def __str__(self):
-        return f'Project({self.project})'
+        return f'from {self.investor} to {self.project}'

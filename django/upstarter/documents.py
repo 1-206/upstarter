@@ -14,4 +14,4 @@ project_index.settings(
 class ProjectDocument(DocType):
     class Meta:
         model = Project
-        fields = ('name', 'description')
+        fields = ('name', 'description', 'tags')

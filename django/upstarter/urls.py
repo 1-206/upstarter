@@ -8,13 +8,15 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('authentication/', include('authentication.urls')),
 
-    path('', RedirectView.as_view(pattern_name='project-list'), name='index'),
+    path('', RedirectView.as_view(pattern_name='personal-project-list'),
+         name='index'),
 
-    path('projects/', views.list_all_projects, name='project-list'),
-    path('projects/<int:id>/', views.list_all_projects, name='project-detail'),
-    path('projects/create/', views.create_project, name='project-create'),
-    path('projects/personal/', views.list_personal_projects,
+    path('projects/', views.personal_project_list,
          name='personal-project-list'),
+    path('projects/<int:pk>/', views.project_detail, name='project-detail'),
+    path('projects/create/', views.project_create, name='project-create'),
+    path('projects/search/', views.project_search, name='project-search'),
 
-    path('personal/', views.personal, name='personal'),
+    path('profile/', views.personal, name='personal'),
+    path('users/<int:pk>/', views.user_detail, name='user-detail'),
 ]

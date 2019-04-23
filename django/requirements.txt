@@ -1,4 +1,5 @@
 django~=2.2
 django-elasticsearch-dsl~=0.5
 elasticsearch-dsl==6.1.0
+faker~=1.0
 psycopg2-binary~=2.8

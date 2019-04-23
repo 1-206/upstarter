@@ -1,0 +1,28 @@
+{% extends 'upstarter/base.html' %}
+
+{% block title %}
+    <title>{{ data.project.name }}</title>
+{% endblock %}
+
+{% block content %}
+  {% include 'upstarter/project_thumbnail.html' %}
+
+  <div class="container bg-white mt-4 p-4">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <h2>Relevant Projects</h2>
+      </div>
+      {% for relevant_project in relevant_projects %}
+      <div class="col-4">
+        <div class="card w-100">
+          <div class="card-body">
+            <h5 class="card-title">{{relevant_project.name}}</h5>
+            <p class="card-text">{{relevant_project.description}}</p>
+            <a href="{% url 'project-detail' pk=relevant_project.pk %}" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

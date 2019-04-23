@@ -1,0 +1,35 @@
+{% extends 'upstarter/base.html' %}
+
+{% block content %}
+  <div class="container pt-5">
+    <div class="row">
+      <h1>Project Creation</h1>
+    </div>
+    <div class="row">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="id_name">Name</label>
+          <br>
+          {{form.name}}
+        </div>
+        <div class="form-group">
+          <label for="id_description">Description</label>
+          <br>
+          {{form.description}}
+        </div>
+        <div class="form-group">
+          <label for="id_tags">Tags</label>
+          <br>
+          {{form.tags}}
+        </div>
+        <div class="form-group">
+          <label for="id_required_investments">Required Investments</label>
+          <br>
+          {{form.required_investments}}
+        </div>
+        <button type="submit" class="btn btn-success">Create</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

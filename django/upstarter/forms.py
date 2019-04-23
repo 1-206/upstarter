@@ -1,51 +1,17 @@
-from django import forms
+from django.forms import ModelForm
+
+from .models import Project, Investment
 
 
+class ProjectCreationForm(ModelForm):
 
-class ProjectCreationForm(forms.Form):
-
-    name = forms.CharField(
-            label="Name",
-            required=True,
-            )
-    description = forms.CharField(
-            label="Description",
-            required=True
-            )
-    required_investments = forms.FloatField(
-            label="Required investments",
-            required=True,
-            )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        required_investments = cleaned_data.get('required_investments')
-
-        if required_investments < 0:
-            self.add_error(
-                'required_investments',
-                "Must be positive or 0"
-            )
-
-        return cleaned_data
+    class Meta:
+        model = Project
+        fields = ('name', 'description', 'tags', 'required_investments')
 
 
-class ProjectInvestmentForm(forms.Form):
+class ProjectInvestmentForm(ModelForm):
 
-    amount = forms.FloatField(
-            label="Required investments",
-            required=True,
-            )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        amount = cleaned_data.get('amount')
-
-        if amount <= 0:
-            self.add_error(
-                'amount',
-                "Must be positive"
-            )
-
-        return cleaned_data
-
+    class Meta:
+        model = Investment
+        fields = ('amount',)
