@@ -18,7 +18,6 @@ class AuthorizationForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-
     name = forms.CharField(
         label="Name",
         required=True,

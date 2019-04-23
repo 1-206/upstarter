@@ -7,7 +7,6 @@ class ProjectCreationForm(forms.Form):
     name = forms.CharField(
             label="Name",
             required=True,
-
             )
     description = forms.CharField(
             label="Description",

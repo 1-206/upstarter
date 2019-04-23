@@ -1,15 +1,14 @@
-from django.db.models import Q
-
-from upstarter.forms import ProjectCreationForm, ProjectInvestmentForm
-from upstarter.models import Project, Investment
-from django.shortcuts import render
-from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.http import (
     HttpResponseRedirect,
     HttpResponse,
 )
+from django.shortcuts import render
+from django.urls import reverse
 
-from django.contrib.auth import get_user_model
+from upstarter.forms import ProjectCreationForm, ProjectInvestmentForm
+from upstarter.models import Project, Investment
+
 User = get_user_model()
 
 
@@ -33,11 +32,11 @@ def list_all_projects(request):
 def list_personal_projects(request):
     user = User.objects.get(pk=request.user.id)
     data = {
-            'user': user,
-            'founded': user.founded_projects,
-            'cofounded': user.cofounded_projects,
-            'performed': user.performed_projects,
-            }
+        'user': user,
+        'founded': user.founded_projects,
+        'cofounded': user.cofounded_projects,
+        'performed': user.performed_projects,
+    }
     return render(request, 'upstarter/personal_projects.html', data)
 
 
@@ -60,11 +59,11 @@ def create_project(request):
         if form.is_valid():
             data = form.cleaned_data
             id = Project.objects.create(
-                    name=data['name'],
-                    description=data['description'],
-                    founder=user,
-                    required_investments=data['required_investments']
-                    )
+                name=data['name'],
+                description=data['description'],
+                founder=user,
+                required_investments=data['required_investments']
+            )
             return HttpResponseRedirect(reverse('project', kwargs={'id': id}))
     else:
         form = ProjectCreationForm()
@@ -91,10 +90,10 @@ def invest_in_project(request, id):
         if form.is_valid():
             amount = form.cleaned_data['amount']
             Investment.objects.create(
-                    investor=user,
-                    project=project,
-                    amount=amount
-                    )
+                investor=user,
+                project=project,
+                amount=amount
+            )
             return HttpResponseRedirect(reverse('project', kwargs={'id': id}))
     else:
         form = ProjectCreationForm()
