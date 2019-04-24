@@ -1,11 +1,72 @@
 {% extends 'upstarter/base.html' %}
 
 {% block title %}
-    <title>{{ data.project.name }}</title>
+  <title>{{ data.project.name }}</title>
 {% endblock %}
 
 {% block content %}
   {% include 'upstarter/project_thumbnail.html' %}
+
+  <div class="container bg-white">
+
+    <div class="pb-5 px-0 px-sm-5">
+      <div class="row">
+        <div class="col-12 mb-5">
+          <h2>Funding</h2>
+
+          <h6>Required: <i class="font-weight-normal">{{project.required_investments}}</i></h6>
+          <h6>Raised: <i class="font-weight-normal">{{project.raised}}</i></h6>
+
+
+          <div class="pt-4">
+            <div class="progress shadow" style="height: 36px">
+              <div class="progress-bar bg-dark"
+                  style="width:calc(100%*{{project.raised}}/{{project.required_investments}})"></div>
+            </div>
+
+            <h6 class="display-3 text-center mt-4"><span
+                class="display-4">{{project.raised}}</span>
+              / {{project.required_investments}}</h6>
+          </div>
+        </div>
+      </div>
+
+      {% if project.cofounders.exists %}
+      <div class="row justify-content-around mb-4">
+        <div class="col-12">
+          <h2>Team</h2>
+        </div>
+
+          {% for cofounder in project.cofounders.all %}
+          <a href="{% url 'user-detail' pk=cofounder.pk %}" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-dark project__participant">
+            <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+                class="img img-rounded img-fluid w-75 d-block mx-auto user__img shadow-sm mb-1"/>
+            <h3 class="font-weight-light text-center">{{cofounder.name}} {{cofounder.surname}}</h3>
+            <h4 class="font-weight-light text-center mx-auto"><i>Co-founder</i></h4>
+          </a>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <h2 class="text-center mb-4">Join Us</h2>
+        </div>
+
+        <div class="col-12">
+          <form class="form-inline flex-nowrap justify-content-around" action="post">
+            <button type="submit" class="btn btn-lg btn-success">
+              Join the team
+            </button>
+
+            <button type="submit" class="btn btn-lg btn-dark">
+              Invest in project
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container bg-white mt-4 p-4">
     <div class="row">

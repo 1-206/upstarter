@@ -34,7 +34,7 @@ def project_detail(request, pk):
     # Use elasticsearch for relevant documents searching
     search = ProjectDocument.search()
     query = search.query(
-        'more_like_this', fields=['name', 'description', 'tags'],
+        'more_like_this', fields=['tags'],
         like={'_id': project.id}, min_term_freq=1, min_doc_freq=1,
         max_query_terms=200, minimum_should_match='5%',
     )
