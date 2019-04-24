@@ -17,7 +17,7 @@ def generate_text(length=100):
     return fake.text(length)
 
 
-def generate_projects(amount=10, min_name_len=2, max_name_len=2, min_tag_len=3,
+def generate_projects(amount=10, min_name_len=2, max_name_len=3, min_tag_len=3,
                       max_tag_len=7, min_invest=100, max_invest=10000,
                       text_len=500):
     projects = []
@@ -52,7 +52,8 @@ def generate_persons(amount=10, min_len_skills=3, max_len_skills=6):
         name = generate_name()
         surname = generate_name()
         email = faker.Faker().email()
-        skills = random_choice(_skills, min_len_skills, max_len_skills)
+        skills = ' '.join(
+            random_choice(_skills, min_len_skills, max_len_skills))
         location = faker.Faker().country()
         birthday = faker.Faker().date()
         biography = generate_text(200)
@@ -82,7 +83,7 @@ class Command(BaseCommand):
         ]
 
         # Create projects
-        projects_data = generate_projects(amount=1000)
+        projects_data = generate_projects(amount=10000)
         Project.objects.bulk_create(
             Project(
                 founder=random.choice(users),

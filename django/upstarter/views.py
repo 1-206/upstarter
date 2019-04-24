@@ -67,7 +67,19 @@ def project_create(request):
 
 @require_authentication
 def project_search(request):
-    return
+    SEARCH_PROJECTS_AMOUNT = 100
+    # Get search parameters
+    query_string = request.GET.get('q', '')
+    # Initialize elasticsearch search
+    search = ProjectDocument.search()
+    query = search.query(
+        'multi_match', query=query_string,
+        fields=['name', 'description', 'tags'],
+    )
+    # Serialize all found objects
+    projects = query.to_queryset()[:SEARCH_PROJECTS_AMOUNT]
+    context = {'user': request.user, 'projects': projects}
+    return render(request, 'upstarter/search.html', context)
 
 
 @require_authentication

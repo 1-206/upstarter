@@ -31,8 +31,8 @@
               </li>
             </ul>
 
-            <form class="form-inline my-2 my-lg-0" action="{% url 'project-search' %}" method="post">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search query">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'project-search' %}" method="get">
+              <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search query">
               <button class="btn btn-outline-light my-2 my-sm-0 mr-2" type="submit">Find Startup</button>
               <a class="btn btn-outline-warning my-2 my-sm-0" href={% url 'logout' %}>Log Out</a>
             </form>
