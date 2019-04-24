@@ -28,7 +28,7 @@ services:
       UWSGI_THREADS: "$DJANGO_UWSGI_THREADS"
       UWSGI_HARAKIRI: "$DJANGO_UWSGI_HARAKIRI"
       UWSGI_MAX_REQUESTS: "$DJANGO_UWSGI_MAX_REQUESTS"
-      DJANGO_APP_NAME: "hela"
+      DJANGO_APP_NAME: "upstarter"
       DJANGO_SECRET_KEY: "$DJANGO_SECRET_KEY"
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: "$DJANGO_ALLOWED_HOSTS"
@@ -38,6 +38,8 @@ services:
       DJANGO_DATABASE_PASSWORD: "pgpassword"
       DJANGO_DATABASE_HOST: "postgres"
       DJANGO_DATABASE_PORT: "5432"
+      DJANGO_ELASTICSEARCH_HOST: "elastic"
+      DJANGO_ELASTICSEARCH_PORT: "9200"
     volumes:
       - "sockets:/tmp/sockets"
       - "django-static:/app/static"
@@ -45,7 +47,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      elastic:
+        condition: service_started
     restart: "always"
+
+  elastic:
+    image: "elasticsearch:6.7.1"
+    user: "$DOCKER_USER"
+    environment:
+      discovery.type: "single-node"
 
   postgres:
     image: "postgres:10.4"
